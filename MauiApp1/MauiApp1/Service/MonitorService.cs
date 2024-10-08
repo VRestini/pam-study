@@ -1,5 +1,5 @@
 ﻿using MauiApp1.MVVM.Models;
-
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 using System.Text.Json;
@@ -12,7 +12,7 @@ namespace MauiApp1.Service
         private HttpClient _httpClient;
         private JsonSerializerOptions _serializerOptions;
         private MVVM.Models.Monitor monitor;
-        private List<MVVM.Models.Monitor> monitores { get; set; }
+        private ObservableCollection<MVVM.Models.Monitor> monitores { get; set; }
 
      
         public MonitorService()
@@ -25,7 +25,7 @@ namespace MauiApp1.Service
             };
             
         }
-        public async Task<List<MVVM.Models.Monitor>> getAllMonitorsAsync()
+        public async Task<ObservableCollection<MVVM.Models.Monitor>> getAllMonitorsAsync()
         {
             Uri uri = new Uri("http://localhost:8080/monitor");
             try
@@ -34,14 +34,14 @@ namespace MauiApp1.Service
                 if (response.IsSuccessStatusCode)
                 {
                     string content = await response.Content.ReadAsStringAsync();
-                    monitores = JsonSerializer.Deserialize<List<MVVM.Models.Monitor>>(content, _serializerOptions);
+                    monitores = JsonSerializer.Deserialize<ObservableCollection<MVVM.Models.Monitor>>(content, _serializerOptions);
                 }
             }
             catch (Exception ex)
             {
                  Debug.WriteLine(ex.Message);
             }
-            return monitores ;
+            return monitores;
         }
     }
 }
